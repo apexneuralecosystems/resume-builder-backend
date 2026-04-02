@@ -14,7 +14,7 @@ app = FastAPI(title="Resume Builder API")
 
 _raw_origins = os.getenv(
     "ALLOWED_ORIGINS",
-    "https://resume.builder.apexneural.com,http://localhost:5173,http://localhost:3000,http://localhost",
+    "https://resume.builder.apexneural.cloud,http://localhost:5173,http://localhost:3000,http://localhost",
 )
 _allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
 
@@ -213,7 +213,7 @@ async def call_openrouter(api_key: str, system_prompt: str, user_content: str) -
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
-        "HTTP-Referer": os.getenv("SITE_URL", "https://resume.builder.apexneural.com"),
+        "HTTP-Referer": os.getenv("SITE_URL", "https://resume.builder.apexneural.cloud"),
         "X-Title": "ResumeForge",
     }
 
@@ -293,4 +293,13 @@ async def parse_resume(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+    # Prefer BACKEND_PORT (your deployment choice), then fall back to PORT, then default.
+    port = os.getenv("BACKEND_PORT") or os.getenv("PORT") or "8282"
+    reload_enabled = str(os.getenv("RELOAD", "false")).lower() in ("1", "true", "yes")
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(port),
+        reload=reload_enabled,
+    )
