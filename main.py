@@ -108,7 +108,7 @@ JSON STRUCTURE
 ═══════════════
 {
   "id": "short unique id e.g. usr-001",
-  "name": "Full Name from resume header",
+  "name": "ONLY first name from resume header (single token; no surname)",
   "role": "Most recent or primary job title",
   "email": "email address if present",
   "phone": "phone number if present",
@@ -177,7 +177,8 @@ FIELD RULES
 6.  interests   : Max 8. Only if the resume has an interests/hobbies section. Do not invent.
 7.  bio/aboutMe : Derived from the resume summary or from actual experience — never fabricated.
 8.  certifications: All listed. Use empty string "" for url if no link is present.
-9.  Return ONLY the raw JSON. No markdown, no explanation, no extra keys.
+9.  name        : Must be first name only. If full name appears, keep only the first word.
+10. Return ONLY the raw JSON. No markdown, no explanation, no extra keys.
 """
 
 JD_PROMPT_ADDITION = """
